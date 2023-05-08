@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\PageController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -49,8 +51,13 @@ Route::middleware(['auth'])->group(function () {
         return view('about');
     });
     Route::put('/pages/{id}/photo', [PageController::class, 'updatePhotoPath'])->name('pages.updatePhotoPath');
-    Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
-
+    //Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+    //Route::post('/logout', [Auth\LoginController::class, 'logout'])->name('logout');
+    Route::post('/logout', function () {
+        Auth::logout();
+        return redirect('/login');
+    })->name('logout');
+    
 });
 
 
