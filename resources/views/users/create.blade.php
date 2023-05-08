@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-md-12">
                 <h1>Add User</h1>
-                <form action="{{ route('users.store') }}" method="POST">
+                <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label for="name">Name</label>
@@ -30,14 +30,30 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
+                    
                     <div class="form-group">
-                        <label for="role">Role</label>
-                        <select name="role" id="role" class="form-control">
-                            <option value="User" {{ old('role') == 'User' ? 'selected' : '' }}>User</option>
-                            <option value="Team Leader" {{ old('role') == 'Team Leader' ? 'selected' : '' }}>Team Leader</option>
-                            <option value="Administrator" {{ old('role') == 'Administrator' ? 'selected' : '' }}>Administrator</option>
+                      <label for="password_confirmation">Confirm Password</label>
+                       <input type="password" name="password_confirmation" id="password_confirmation" class="form-control">
+                     @error('password_confirmation')
+                    <span class="text-danger">{{ $message }}</span>
+                      @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Type</label>
+                        <select name="type" id="type" class="form-control">
+                        <option value="User" {{ old('type') == 'User' ? 'selected' : '' }}>User</option>
+                         <option value="Team Leader" {{ old('type') == 'Team Leader' ? 'selected' : '' }}>Team Leader</option>
+                        <option value="Administrator" {{ old('type') == 'Administrator' ? 'selected' : '' }}>Administrator</option>
+
                         </select>
-                        @error('role')
+                        @error('type')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="image">Image</label>
+                        <input type="file" name="image" id="image" class="form-control-file">
+                        @error('image')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>

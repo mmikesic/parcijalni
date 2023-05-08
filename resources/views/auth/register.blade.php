@@ -1,70 +1,81 @@
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
+<div class="card-body">
+    <form method="POST" action="{{ route('register') }}">
+        @csrf
 
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+        <div class="row mb-3">
+            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
 
-        <form method="POST" action="{{ route('register') }}">
-            @csrf
+            <div class="col-md-6">
+                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
 
-            <!-- Name -->
-            <div>
-                <x-label for="name" :value="__('Name')" />
-
-                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
+                @error('name')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
             </div>
+        </div>
 
-            <!-- Email Address -->
-            <div class="mt-4">
-                <x-label for="email" :value="__('Email')" />
+        <div class="row mb-3">
+            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
 
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
+            <div class="col-md-6">
+                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+
+                @error('email')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
             </div>
+        </div>
 
-            <!-- Role -->
-            <div class="mt-4">
-                <x-label for="role" :value="__('Role')" />
+        <div class="row mb-3">
+            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
 
-                <select id="role" class="block mt-1 w-full" name="role" required>
-                    <option value="">-- Select Role --</option>
-                    <option value="admin">Admin</option>
-                    <option value="user">User</option>
+            <div class="col-md-6">
+                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+
+                @error('password')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="password-confirm" class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }}</label>
+
+            <div class="col-md-6">
+                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="type" class="col-md-4 col-form-label text-md-end">{{ __('Type') }}</label>
+
+            <div class="col-md-6">
+                <select id="type" class="form-control @error('type') is-invalid @enderror" name="type[]" multiple>
+                    @foreach($types as $type)
+                        <option value="{{ $type }}">{{ $type }}</option>
+                    @endforeach
                 </select>
+
+                @error('type')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
             </div>
+        </div>
 
-            <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
-
-                <x-input id="password" class="block mt-1 w-full"
-                                type="password"
-                                name="password"
-                                required autocomplete="new-password" />
-            </div>
-
-            <!-- Confirm Password -->
-            <div class="mt-4">
-                <x-label for="password_confirmation" :value="__('Confirm Password')" />
-
-                <x-input id="password_confirmation" class="block mt-1 w-full"
-                                type="password"
-                                name="password_confirmation" required />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
-                    {{ __('Already registered?') }}
-                </a>
-
-                <x-button class="ml-4">
+        <div class="row mb-0">
+            <div class="col-md-6 offset-md-4">
+                <button type="submit" class="btn btn-primary">
                     {{ __('Register') }}
-                </x-button>
+                </button>
             </div>
-        </form>
-    </x-auth-card>
-</x-guest-layout>
+        </div>
+    </form>
+</div>

@@ -1,29 +1,22 @@
-<?php
+<?php 
 
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 
-
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
-
-
-
 
     /**
      * The attributes that are mass assignable.
@@ -34,6 +27,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'type', // Dodali smo type atribut za definiranje uloge korisnika
     ];
 
     /**
@@ -65,7 +59,8 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
-        /**
+
+    /**
      * Check if user is an administrator.
      *
      * @return bool
@@ -74,6 +69,7 @@ class User extends Authenticatable
     {
         return $this->type === 'Admin' || $this->type === 'Team Leader';
     }
+
     /**
      * Check if user is a team leader.
      *

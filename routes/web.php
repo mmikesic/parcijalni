@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,11 +20,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
-Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -31,16 +32,26 @@ Route::middleware('auth')->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
+    Route::get('/pages', 'App\Http\Controllers\PageController@index')->name('pages.index');
+    Route::get('/pages/create', 'App\Http\Controllers\PageController@create')->name('pages.create');
+    Route::post('/pages', 'App\Http\Controllers\PageController@store')->name('pages.store');
+    Route::get('/pages/{page}', 'App\Http\Controllers\PageController@show')->name('pages.show');
+    Route::get('/pages/{page}/edit', 'App\Http\Controllers\PageController@edit')->name('pages.edit');
+    Route::put('/pages/{page}', 'App\Http\Controllers\PageController@update')->name('pages.update');
+    Route::delete('/pages/{page}', 'App\Http\Controllers\PageController@destroy')->name('pages.destroy');
     
-    Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
-    Route::get('/users/create', [App\Http\Controllers\UserController::class, 'create'])->name('users.create');
-    Route::post('/users', [App\Http\Controllers\UserController::class, 'store'])->name('users.store');
-    Route::get('/users/{user}', [App\Http\Controllers\UserController::class, 'show'])->name('users.show');
-    Route::get('/users/{user}/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('users.edit');
-    Route::put('/users/{user}', [App\Http\Controllers\UserController::class, 'update'])->name('users.update');
-    Route::delete('/users/{user}', [App\Http\Controllers\UserController::class, 'destroy'])->name('users.destroy');
-    
+    Route::get('/about', function () {
+        return view('about');
+    });
+    Route::put('/pages/{id}/photo', [PageController::class, 'updatePhotoPath'])->name('pages.updatePhotoPath');
+    Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
 
 });
 
-require __DIR__.'/auth.php';
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
