@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PageController;
 
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,6 +20,9 @@ use App\Http\Controllers\PageController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/register', [App\Http\Controllers\Auth\RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [App\Http\Controllers\Auth\RegisterController::class, 'register']);
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
@@ -38,6 +40,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::get('password/reset/{token}', '\App\Http\Controllers\Auth\ResetPasswordController@showResetForm')->name('password.reset');
 
     Route::get('/pages', 'App\Http\Controllers\PageController@index')->name('pages.index');
     Route::get('/pages/create', 'App\Http\Controllers\PageController@create')->name('pages.create');
@@ -57,8 +60,8 @@ Route::middleware(['auth'])->group(function () {
         Auth::logout();
         return redirect('/login');
     })->name('logout');
-    
 });
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+

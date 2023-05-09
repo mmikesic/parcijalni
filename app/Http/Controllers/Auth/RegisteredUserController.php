@@ -22,7 +22,7 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        $types = Type::all();
+        $types = Type::whereIn('name', ['Administrator', 'Team Leader', 'User'])->get();
         return view('auth.register', compact('types'));
     }
 
@@ -38,7 +38,7 @@ class RegisteredUserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'type' => ['required', 'array', 'min:1'],
-            'type.*' => ['exists:types,id']
+            'type.*' => ['exists:types,name']
         ]);
 
         $user = User::create([
@@ -46,6 +46,8 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        $types = Type::whereIn('name', ['Administrator', 'Team Leader', 'User'])->pluck('id', 'name');
 
         $user->types()->sync($request->type);
 
