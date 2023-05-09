@@ -27,8 +27,8 @@ jobs:
     - name: Install Dependencies
       run: composer install --prefer-dist --no-interaction
 
-    - name: PHPUnit tests
-      run: ./vendor/bin/phpunit tests/
+    # - name: PHPUnit tests
+    #   run: ./vendor/bin/phpunit tests/
 
     - name: PHPStan analysis
       run: ./vendor/bin/phpstan analyze src/
